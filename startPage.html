@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dots and Boxes</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&family=Playwrite+AR:wght@100..400&family=Roboto+Slab:wght@100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+        body {
+            overflow: hidden;
+            background: linear-gradient(-25deg, rgba(0, 0, 255, 0.411) 50%, rgba(255, 0, 0, 0.533) 50%);
+            display: flex;
+            justify-content: center;
+        }
+
+        .fixed {
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            opacity: 0.5;
+        }
+
+        .grid-container {
+            display: grid;
+            gap: 0;
+        }
+
+        .dots {
+            background-color: black;
+            border-radius: 50%;
+            justify-self: center;
+            align-self: center;
+            z-index: 2;
+        }
+
+        .line-horizontal, .line-vertical {
+            background-color: rgb(255, 255, 255);
+        }
+
+        .square {
+            background-color: transparent;
+        }
+
+        .grid-1 {
+            grid-template-columns: repeat(9, 1.4vh);
+            grid-template-rows: repeat(9, 0.7vw);
+            transform: rotate(-45deg);
+            position: fixed;
+            top: 5vh;
+            left: 5vw;
+        }
+
+        .grid-1 .dots {
+            height: 0.68vh;
+            width: 0.34vw;
+            margin-left: 0.07vw;
+        }
+
+        .grid-1 .line-horizontal {
+            width: 200%;
+            height: 0.27vh;
+            margin-top: 43%;
+            margin-left: -42%;
+        }
+
+        .grid-1 .line-vertical {
+            width: 0.134vw;
+            height: 200%;
+            margin-left: 43%;
+            margin-top: -40%;
+        }
+
+        .grid-2 {
+            position: absolute;
+            grid-template-columns: repeat(9, 2.7vh);
+            grid-template-rows: repeat(9, 1.34vw);
+            transform: rotate(-30deg);
+            bottom: 5vh;
+            left: 5vh;
+        }
+
+        .grid-2 .dots {
+            width: 0.53vw;
+            height: 1.1vh;
+            margin-left: 0.1vw;
+        }
+
+        .grid-2 .line-horizontal {
+            width: 200%;
+            height: 0.55vh;
+            margin-top: 43%;
+            margin-left: -42%;
+        }
+
+        .grid-2 .line-vertical {
+            width: 0.27vw;
+            height: 200%;
+            margin-left: 43%;
+            margin-top: -40%;
+        }
+
+        .grid-3 {
+            grid-template-columns: repeat(9, 4.1vh);
+            grid-template-rows: repeat(9, 2vw);
+            transform: rotate(40deg);
+            position: absolute;
+            right: 10vh;
+        }
+
+        .grid-3 .dots {
+            width: 0.81vw;
+            height: 1.64vh;
+            margin-left: 0.1vw;
+        }
+
+        .grid-3 .line-horizontal {
+            width: 200%;
+            height: 0.68vh;
+            margin-top: 43%;
+            margin-left: -42%;
+        }
+
+        .grid-3 .line-vertical {
+            width: 0.34vw;
+            height: 200%;
+            margin-left: 43%;
+            margin-top: -40%;
+        }
+
+        .grid-5 {
+            grid-template-columns: repeat(9, 6.83vh);
+            grid-template-rows: repeat(9, 3.37vw);
+            position: absolute;
+            top: 25vh;
+            left: 30vw;
+        }
+
+        .grid-5 .dots {
+            width: 1.1vw;
+            height: 2.2vh;
+            margin-left: 0.07vw;
+        }
+
+        .grid-5 .line-horizontal {
+            width: 200%;
+            height: 1.1vh;
+            margin-left: -42%;
+            margin-top: 40%;
+        }
+
+        .grid-5 .line-vertical {
+            width: 0.54vw;
+            height: 200%;
+            margin-left: 43%;
+            margin-top: -40%;
+        }
+
+        .secRow {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .menu {
+            border: 1px solid rgb(0, 0, 0);
+            border-radius: 5px;
+            display: grid;
+            justify-content: center;
+            flex-direction: column;
+            opacity: 1;
+            height: 380px;
+            width: 350px;
+            z-index: 5;
+            position: absolute;
+            top: 18%;
+            padding-top: 80px;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            opacity: 0.9;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        #start {
+            width: 200px;
+            display: flex;
+            border: 1px solid;
+            align-items: center;
+            justify-content: center;
+            height: 50%;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        #start:hover {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #size {
+            border: 1px solid rgb(0, 0, 0);
+            display: flex;
+            border: 1px solid;
+            align-items: center;
+            justify-content: center;
+            width: 150px;
+            height: 50%;
+            margin-left: 30px;
+            cursor: pointer;
+        }
+
+        #music, #sound {
+            border: 1px solid rgb(0, 0, 0);
+            display: grid;
+            align-items: start;
+            justify-content: center;
+            height: 40%;
+            cursor: pointer;
+            border-radius: 30% 30% 90% 90%;
+            height: 90px;
+            width: 80px;
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #music:hover svg, #sound:hover svg {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #sizeOptions {
+            margin-left: 10px;
+            background-color: transparent;
+            outline: none;
+        }
+
+        #sizeOptions > option {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #music :last-child {
+            border: 1px solid;
+            border-radius: 50%;
+            height: 50px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            width: 60px;
+        }
+
+        #sound :last-child {
+            border: 1px solid;
+            border-radius: 50%;
+            height: 50px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            width: 60px;
+        }
+
+        .secRow p {
+            margin-left: 10px;
+            margin-top: 3px;
+            margin-bottom: 0;
+        }
+
+        #music::after ,#sound::after {
+            position: relative;
+            content: '';
+            width: 1px;
+            height: 60px;
+            background-color: rgb(0, 0, 0);
+            transform: rotate(45deg);
+            transform-origin: center;
+            display: none;
+            position: relative;
+            bottom: 60px;
+            margin-left: 30px;
+        }
+
+        #music.active::after, #sound.active::after {
+            display: block;
+        }
+
+        .claim {
+            margin-top: -20px;
+            width: 100%;
+            font-size: 13px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="fixed">
+        <div class="grid-container grid-1">
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+    
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+    
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+    
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+    
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+    
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+    
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+    
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+    
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+        </div>
+        <div class="grid-container grid-2">
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+    
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+    
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+    
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+    
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+    
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+    
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+    
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+    
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+        </div>
+    
+        <div class="grid-container grid-3">
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+    
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+    
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+    
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+    
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+    
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+    
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+    
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+    
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+        </div>
+        <div class="grid-container grid-3" style="bottom: -5vh">
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+    
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+    
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+    
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+    
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+    
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+    
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+    
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+    
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+        </div>
+       
+        <div class="grid-container grid-5">
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+    
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+    
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+    
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+    
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+    
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+    
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+    
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+            <div class="square"></div>
+            <div class="line-vertical"></div>
+    
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+            <div class="line-horizontal"></div>
+            <div class="dots"></div>
+        </div>
+    </div>
+
+<div class="menu">
+    <div id="start">Start Game</div>
+    <div id="size">Size
+        <select id="sizeOptions">
+            <option value="4">4 x 4</option>
+            <option value="5">5 x 5</option>
+            <option value="6">6 x 6</option>
+            <option value="7">7 x 7</option>
+            <option value="8">8 x 8</option>
+            <option value="9">9 x 9</option>
+            <option value="10">10 x 10</option>
+            <option value="11">11 x 11</option>
+        </select>
+    </div>
+
+    <div class="secRow">
+        <div id="music">
+            <p>Music</p>
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"
+                 class="lucide lucide-music"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle
+                    cx="18" cy="16" r="3"/></svg>
+        </div>
+        <div id="sound">
+            <p>Sound</p>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"
+                 class="lucide lucide-volume-2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path
+                    d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+        </div>
+    </div>
+
+    <div class="claim">*These 2 buttons are just for show</div>
+</div>
+
+
+<script>
+    const startButton = document.querySelector('#start');
+    const musicButton = document.querySelector('#music');
+    const soundButton = document.querySelector('#sound');
+    const sizeOptions = document.querySelector('#sizeOptions');
+
+    startButton.addEventListener('click', () => {
+        location.href = 'main.html';
+    });
+
+    soundButton.addEventListener('click', () => {
+        soundButton.classList.toggle('active');
+    });
+
+    musicButton.addEventListener('click', () => {
+        musicButton.classList.toggle('active');
+    });
+
+    sizeOptions.addEventListener('change', () => {
+        localStorage.setItem('gridSize', sizeOptions.value);
+    });
+
+    const savedGridSize = localStorage.getItem('gridSize');
+    if (savedGridSize) {
+        sizeOptions.value = savedGridSize;
+    }
+
+
+</script>
+
+</body>
+</html>
