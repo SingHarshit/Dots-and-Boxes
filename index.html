@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dots and Boxes Game</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
+<body>
+    <div class="outer"></div>
+
+        <div class="game-board" id="gameBoard"></div>
+
+    
+    <div class="info">
+        <p>Current Player: <span id="currentPlayer">1</span></p>
+        <p>Player 1 Score: <span id="player1Score">0</span></p>
+        <p>Player 2 Score: <span id="player2Score">0</span></p>
+    <div class="dash-border"></div>
+    </div>
+    <div class="circle">
+    <p class="load"><i class="fa-solid fa-rotate-right"></i></p>
+    </div>
+    <div class="exit">EXIT</div>
+
+    <div id="winnerOverlay" class="overlay">
+        <div id="winnerMessage"></div>
+      </div>
+      
+    
+    <script src="script.js"></script>
+</body>
+</html>
+
