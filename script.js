@@ -425,5 +425,5 @@ reloadButton.addEventListener('click', () => {
 
 //exit button
 exit.addEventListener('click', () => {
-  location.href = 'startPage.html';  // Replace with your target page URL
+  location.href = 'index.html';  // Replace with your target page URL
 });
